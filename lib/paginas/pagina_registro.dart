@@ -7,6 +7,10 @@ class PaginaRegistro extends StatelessWidget {
     super.key,
   });
 
+  void hacerRegistro() {
+    print("Registrando...");
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextEditingController tecEmail = TextEditingController();
@@ -74,7 +78,7 @@ class PaginaRegistro extends StatelessWidget {
                 const SizedBox(height: 10),
 
                 //no esta registardo?
-                 Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("¿Ya eres miembro?",
@@ -93,7 +97,14 @@ class PaginaRegistro extends StatelessWidget {
                 const SizedBox(height: 10),
 
                 //boton de registro.
-                BotoAuth()
+                BotoAuth(
+                  texto: "Registrarse",
+                  onTap: hacerRegistro,
+                ),
+                BotoAuth(
+                  texto: "Logearse",
+                  onTap: (){},
+                )
               ],
             ),
           ),
