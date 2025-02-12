@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "620495679666",
+    "project_id": "marcosflutterfirebaseejemplo",
+    "storage_bucket": "marcosflutterfirebaseejemplo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:620495679666:android:969947b59ce459465619ab",
+        "android_client_info": {
+          "package_name": "com.example.firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEgS4SyBK0o2f9ZcD8-juT2YObWvOIpEQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
