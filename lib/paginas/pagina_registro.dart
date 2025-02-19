@@ -8,10 +8,30 @@ class PaginaRegistro extends StatelessWidget {
     super.key,
   });
 
-  void hacerRegistro() {
-    final ServeiAuth serveiAuth = ServeiAuth();
+  void hacerRegistro(BuildContext context, String email, String password,
+      String confPassword) async {
+    if (password.isEmpty || email.isEmpty) {
+      print("La contraseña no puede estar vacia");
+      return;
+    }
 
-    serveiAuth.registroConEmailPassword("email1@email.com", "123456");
+    if (password != confPassword) {
+      print("Las contraseñas no coinciden");
+      return;
+    }
+
+    try {
+      final ServeiAuth serveiAuth = ServeiAuth();
+      serveiAuth.registroConEmailPassword(email, password);
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Error"),
+          content: Text(e.toString()),
+        ),
+      );
+    }
   }
 
   @override
@@ -102,13 +122,14 @@ class PaginaRegistro extends StatelessWidget {
                 //boton de registro.
                 BotoAuth(
                   texto: "Registrarse",
-                  onTap: hacerRegistro,
+                  onTap: () => hacerRegistro(context, tecEmail.text,
+                      tecPassword.text, tecConfirmPassword.text),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: BotoAuth(
                     texto: "Logearse",
-                    onTap: (){},
+                    onTap: () {},
                   ),
                 )
               ],
