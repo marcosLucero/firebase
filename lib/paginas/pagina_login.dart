@@ -1,52 +1,41 @@
 import 'package:firebase/auth/servei_auth.dart';
 import 'package:firebase/componetes/boto_auth.dart';
 import 'package:firebase/componetes/textfield_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class PaginaRegistro extends StatelessWidget {
+class PaginaLogin extends StatelessWidget {
 
-  final Function()? hacerClic;
+    final Function()? hacerClic;
 
-  const PaginaRegistro({
-    super.key,
+  PaginaLogin({super.key,
     required this.hacerClic,
   });
 
-  void hacerRegistro(BuildContext context, String email, String password,
-      String confPassword) async {
-    if (password.isEmpty || email.isEmpty) {
-      print("La contraseña no puede estar vacia");
-      return;
-    }
+  void ferLogin(BuildContext context, String email, String password) async {
+    String? error = await ServeiAuth().loginConEmailPassword(email, password);
 
-    if (password != confPassword) {
-      print("Las contraseñas no coinciden");
-      return;
-    }
-
-      String? error = await ServeiAuth().registroConEmailPassword(email, password);
-
-      if (error != null) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            backgroundColor: Colors.yellow,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            title: const Text("Error"),
-            content: Text(email),
+    if (error != null) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: Colors.yellow,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
           ),
-        );
-        return;
-      }
+          title: const Text("Error"),
+          content: Text(error),
+        ),
+      );
+    } else {
+      print("Login correcto");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final TextEditingController tecEmail = TextEditingController();
     final TextEditingController tecPassword = TextEditingController();
-    final TextEditingController tecConfirmPassword = TextEditingController();
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -62,7 +51,7 @@ class PaginaRegistro extends StatelessWidget {
                 const SizedBox(height: 25),
 
                 //Frase.
-                const Text("Crear una cuenta nueva",
+                const Text("Bienvenido de nuevo",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -79,7 +68,7 @@ class PaginaRegistro extends StatelessWidget {
                           child: Divider(thickness: 1, color: Colors.white)),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8),
-                        child: Text("Registrate",
+                        child: Text("Hacer login",
                             style:
                                 TextStyle(color: Colors.white, fontSize: 16)),
                       ),
@@ -100,11 +89,6 @@ class PaginaRegistro extends StatelessWidget {
                   obscureText: true,
                   hintText: "Password",
                 ),
-                TextfieldAuth(
-                  controller: tecConfirmPassword,
-                  obscureText: true,
-                  hintText: "Confirmar Password",
-                ),
 
                 const SizedBox(height: 10),
 
@@ -112,13 +96,13 @@ class PaginaRegistro extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("¿Ya eres miembro?",
+                    Text("Aun no eres miebro?",
                         style: TextStyle(color: Colors.white)),
                     SizedBox(width: 5),
                     GestureDetector(
                       onTap: hacerClic,
                       child: Text(
-                        "Iniciar sesión",
+                        "Registrate",
                         style: TextStyle(
                           color: Colors.yellow,
                         ),
@@ -130,9 +114,12 @@ class PaginaRegistro extends StatelessWidget {
 
                 //boton de registro.
                 BotoAuth(
-                  texto: "Registrarse",
-                  onTap: () => hacerRegistro(context, tecEmail.text,
-                      tecPassword.text, tecConfirmPassword.text),
+                  texto: "Login",
+                  onTap: () => ferLogin(
+                    context,
+                    tecEmail.text,
+                    tecPassword.text,
+                  ),
                 ),
               ],
             ),

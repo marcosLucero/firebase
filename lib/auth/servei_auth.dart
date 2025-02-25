@@ -5,8 +5,30 @@ class ServeiAuth {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  //hacer logout
+  Future<void> hacerLogout() async {
+    return await _auth.signOut();
+  }
+
+  //hacer login
+  Future<String?> loginConEmailPassword(String email, String password) async {
+
+    try {
+
+      UserCredential credencialUsari = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      return null;
+
+    } on FirebaseAuthException catch (e) {
+      return "Error: ${e.message}";	
+    }
+  }
+
   //hacer registro
-  Future<UserCredential> registroConEmailPassword(
+  Future<String?> registroConEmailPassword(
       String email, password) async {
     try {
       UserCredential credencialUsari =
@@ -21,9 +43,20 @@ class ServeiAuth {
         "nombre": "",
       });
 
-      return credencialUsari;
+      return null;
     } on FirebaseAuthException catch (e) {
-      throw Exception(e.code);
+      switch (e.code) {
+        case "email-already-in-use":
+          return "El correo ya esta en uso";
+        case "invalid-email":
+          return "El correo no es valido";
+        case "weak-password":
+          return "La contraseña es muy debil";
+        default:
+          return "Error ${e.message}";
+      }
+    } catch (e) {
+      return "Error $e";
     }
   }
 }
