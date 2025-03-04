@@ -5,6 +5,11 @@ class ServeiAuth {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  //usario actual
+  User? getUsarioActual() {
+    return _auth.currentUser;
+  }
+
   //hacer logout
   Future<void> hacerLogout() async {
     return await _auth.signOut();
@@ -12,24 +17,42 @@ class ServeiAuth {
 
   //hacer login
   Future<String?> loginConEmailPassword(String email, String password) async {
-
     try {
-
       UserCredential credencialUsari = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      return null;
+      //Comprobamos si el usuario esta dado de alta en la base de datos.
 
+      final QuerySnapshot querySnapshot = await _firestore
+          .collection("Usarios")
+          .where("emial", isEqualTo: email)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        
+        _firestore.collection("Usarios").doc(credencialUsari.user!.uid).set({
+          "uid": credencialUsari.user!.uid,
+          "email": email,
+          "nombre": "",
+        });
+      }
+
+      _firestore.collection("Usarios").doc(credencialUsari.user!.uid).set({
+        "uid": credencialUsari.user!.uid,
+        "email": email,
+        "nombre": "",
+      });
+
+      return null;
     } on FirebaseAuthException catch (e) {
-      return "Error: ${e.message}";	
+      return "Error: ${e.message}";
     }
   }
 
   //hacer registro
-  Future<String?> registroConEmailPassword(
-      String email, password) async {
+  Future<String?> registroConEmailPassword(String email, password) async {
     try {
       UserCredential credencialUsari =
           await _auth.createUserWithEmailAndPassword(

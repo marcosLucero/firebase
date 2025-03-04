@@ -1,6 +1,7 @@
 import 'package:firebase/auth/servei_auth.dart';
 import 'package:firebase/chat/servei_chat.dart';
 import 'package:firebase/componetes/item_usari.dart';
+import 'package:firebase/paginas/pagina_chat.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,9 @@ class _PaginaInicioState extends State<PaginaInicio> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.yellow,
-        title: const Text("Pagina de inicio"),
+        title: Text(
+          ServeiAuth().getUsarioActual()!.email!,
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -30,7 +33,6 @@ class _PaginaInicioState extends State<PaginaInicio> {
       body: StreamBuilder(
         stream: ServeiChat().getUsarios(),
         builder: (context, snapshot) {
-
           //si hay un error
           if (snapshot.hasError) {
             return const Center(
@@ -44,18 +46,31 @@ class _PaginaInicioState extends State<PaginaInicio> {
 
           //Devuelvo los datos
           return ListView(
-            children: snapshot.data!.map<Widget>(
-              (dadesUsari) => _construirItemUsario(dadesUsari),
-              
-              ).toList(),
+            children: snapshot.data!
+                .map<Widget>(
+                  (dadesUsari) => _construirItemUsario(dadesUsari, context),
+                )
+                .toList(),
           );
         },
       ),
     );
   }
 
-  Widget _construirItemUsario(Map<String, dynamic> dadesUsari) {
-    return ItemUsari(emailUsario: dadesUsari["email"]);
+  Widget _construirItemUsario(Map<String, dynamic> dadesUsari, BuildContext context) {
+    if (dadesUsari["email"] == ServeiAuth().getUsarioActual()!.email) {
+      return Container();
     }
-
+    return ItemUsari(
+      emailUsario: dadesUsari["email"],
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PaginaChat(idReceptor: dadesUsari["uid"],),
+          ),
+        );
+      },
+    );
+  }
 }
