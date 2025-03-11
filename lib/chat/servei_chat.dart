@@ -44,4 +44,20 @@ class ServeiChat {
           nuevoMensaje.devuelveMensaje(),
         );
   }
+
+  Stream<QuerySnapshot> getMensajes(String idUsarioActual,String idReceptor) {
+
+    //creamos el id de la sala de chat, igual que en el metodo enviarMensaje.
+    List<String> idUsarios = [idUsarioActual, idReceptor];
+    idUsarios.sort();
+    String idSalaChat = idUsarios.join("_");
+
+    //devolvemos los mensajes de la sala de chat.
+    return _firestore
+        .collection("SalasChats")
+        .doc(idSalaChat)
+        .collection("Mensajes")
+        .orderBy("timestamp", descending: false)
+        .snapshots();
+  }
 }
