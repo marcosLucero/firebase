@@ -14,7 +14,7 @@ class ServeiChat {
     });
   }
 
-  Future<void> enviarMensaje(String idReceptor, String mensaje) async {
+  Future<void> enviarMensaje(String idReceptor, String mensaje,) async {
     //La sala de chat es entre dos usuarios.
     //La creamos  a partir de las ids de los usuarios.
     String idUsarioActual = _auth.currentUser!.uid;

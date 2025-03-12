@@ -19,6 +19,25 @@ class PaginaChat extends StatefulWidget {
 
 class _PaginaChatState extends State<PaginaChat> {
   final TextEditingController tecMensaje = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    //Todo: implement initState
+    super.initState();
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+     hacerScrollAbajo();
+    });
+  }
+
+  void hacerScrollAbajo() {
+     _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent + 100,
+        duration: const Duration(seconds: 1),
+        curve: Curves.bounceOut,
+      );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,36 +59,42 @@ class _PaginaChatState extends State<PaginaChat> {
   }
 
   Widget _crearZonaMostrarMensajes() {
-    return Expanded(child: StreamBuilder(
-      stream: ServeiChat().getMensajes(
-        ServeiAuth().getUsarioActual()!.uid,
-        widget.idReceptor,
-      ),
-      builder: (context, snapshot) {
-
-        //caso de error
-        if (snapshot.hasError) {
-          return Text("Error en la carga de mesnajes");
-          //caso de cargando datos
-         
-        }
-         if (snapshot.connectionState == ConnectionState.waiting) {
+    return Expanded(
+      child: StreamBuilder(
+        stream: ServeiChat().getMensajes(
+          ServeiAuth().getUsarioActual()!.uid,
+          widget.idReceptor,
+        ),
+        builder: (context, snapshot) {
+          //caso de error
+          if (snapshot.hasError) {
+            return Text("Error en la carga de mesnajes");
+            //caso de cargando datos
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: Text("Cargando mensajes..."),
             );
           }
-        //caso de datos cargados
-        return ListView(
-          children: snapshot.data!.docs.map((document) => _contruirItemMensaje(document)).toList(),
+          //caso de datos cargados
+          return ListView(
+            controller: _scrollController,
+            children: snapshot.data!.docs
+                .map((document) => _contruirItemMensaje(document))
+                .toList(),
           );
-    },
-    ),
+        },
+      ),
     );
   }
+
   Widget _contruirItemMensaje(DocumentSnapshot documentSnapshot) {
     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
 
-    return BorbujaMensaje(mensaje: data["mensaje"],);//Text(data["mensaje"]);
+    return BorbujaMensaje(
+      mensaje: data["mensaje"],
+      idAuthor: data["idAuthor"],
+    ); //Text(data["mensaje"]);
   }
 
   Widget _crearZonaEnviarMensaje() {
@@ -108,6 +133,8 @@ class _PaginaChatState extends State<PaginaChat> {
       );
 
       tecMensaje.clear();
+      Future.delayed(const Duration(milliseconds: 500), () {
+      hacerScrollAbajo();});
     }
   }
 }
