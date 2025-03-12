@@ -21,22 +21,30 @@ class _PaginaChatState extends State<PaginaChat> {
   final TextEditingController tecMensaje = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
+  FocusNode tecladoMobil = FocusNode();
+
   @override
   void initState() {
     //Todo: implement initState
     super.initState();
 
+    tecladoMobil.addListener(() {
+       Future.delayed(const Duration(milliseconds: 500), () {
+        hacerScrollAbajo();
+    });
+  });
+
     Future.delayed(const Duration(milliseconds: 500), () {
-     hacerScrollAbajo();
+      hacerScrollAbajo();
     });
   }
 
   void hacerScrollAbajo() {
-     _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent + 100,
-        duration: const Duration(seconds: 1),
-        curve: Curves.bounceOut,
-      );
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent + 100,
+      duration: const Duration(seconds: 1),
+      curve: Curves.bounceOut,
+    );
   }
 
   @override
@@ -134,7 +142,8 @@ class _PaginaChatState extends State<PaginaChat> {
 
       tecMensaje.clear();
       Future.delayed(const Duration(milliseconds: 500), () {
-      hacerScrollAbajo();});
+        hacerScrollAbajo();
+      });
     }
   }
 }
