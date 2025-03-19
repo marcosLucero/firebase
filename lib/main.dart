@@ -8,9 +8,21 @@ import 'package:flutter/material.dart';
 void main()async {
 
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+
+  if (Firebase.apps.isEmpty){
+
+    try {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    } catch (e) {
+      print("Error iniciating Firebase: ");
+    }
+    
+  } else {
+    print("Firebase already initialized");
+  }
+  
 
 
   runApp(const MainApp());

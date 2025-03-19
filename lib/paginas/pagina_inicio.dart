@@ -1,6 +1,7 @@
 import 'package:firebase/auth/servei_auth.dart';
 import 'package:firebase/chat/servei_chat.dart';
 import 'package:firebase/componetes/item_usari.dart';
+import 'package:firebase/paginas/editar_datosUsario.dart';
 import 'package:firebase/paginas/pagina_chat.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,15 @@ class _PaginaInicioState extends State<PaginaInicio> {
           ServeiAuth().getUsarioActual()!.email!,
         ),
         actions: [
+          IconButton(onPressed:() {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const EditarDatosusario(),
+              ),
+            );
+          }, icon: Icon(Icons.chat)),
+          
           IconButton(
             onPressed: () {
               ServeiAuth().hacerLogout();
