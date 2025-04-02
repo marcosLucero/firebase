@@ -1,7 +1,5 @@
 import 'package:firebase/auth/portal_auth.dart';
 import 'package:firebase/firebase_options.dart';
-import 'package:firebase/paginas/pagina_login.dart';
-import 'package:firebase/paginas/pagina_registro.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 

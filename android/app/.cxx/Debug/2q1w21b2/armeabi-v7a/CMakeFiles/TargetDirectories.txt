@@ -1,0 +1,2 @@
+D:/M08 Programacio multimedia i dispositius mobils/firebase/android/app/.cxx/Debug/2q1w21b2/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/M08 Programacio multimedia i dispositius mobils/firebase/android/app/.cxx/Debug/2q1w21b2/armeabi-v7a/CMakeFiles/rebuild_cache.dir
